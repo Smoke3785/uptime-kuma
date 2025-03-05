@@ -5,9 +5,12 @@ dist-ssr
 *.local
 .idea
 
-/data
-!/data/.gitkeep
-/data*
+# Ignore all files in the data directory
+/data/*
+# But do not ignore these specific files
+!/data/db-config.json
+# !/data/.gitkeep
+
 .vscode
 
 /private
