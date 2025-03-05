@@ -1041,6 +1041,24 @@ export default {
             this.slug = "default";
         }
 
+        try {
+            // [Iliad] Attach iframe resizer script so this page can be embedded
+            const iframeScript = document.createElement("script");
+            iframeScript.setAttribute(
+                "src",
+                "https://cdn.jsdelivr.net/npm/@open-iframe-resizer/core@latest/dist/index.js"
+            );
+            iframeScript.setAttribute("type", "module");
+            document.head.appendChild(iframeScript);
+
+            console.log("[Iliad] Attached iframe resizer script");
+        } catch (error) {
+            console.error(
+                "[Iliad] Failed to attach iframe resizer script",
+                error
+            );
+        }
+
         this.getData()
             .then((res) => {
                 this.config = res.data.config;
