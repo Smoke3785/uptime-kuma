@@ -7,16 +7,35 @@
         :animation="100"
     >
         <template #item="group">
-            <div class="mb-5" data-testid="group">
+            <div class="iliad-MonitorGroup-root mb-5" data-testid="group">
                 <!-- Group Title -->
-                <h2 class="group-title">
-                    <font-awesome-icon v-if="editMode && showGroupDrag" icon="arrows-alt-v" class="action drag me-3" />
-                    <font-awesome-icon v-if="editMode" icon="times" class="action remove me-3" @click="removeGroup(group.index)" />
-                    <Editable v-model="group.element.name" :contenteditable="editMode" tag="span" data-testid="group-name" />
+                <h2 class="group-title iliad-MonitorGroup-title">
+                    <font-awesome-icon
+                        v-if="editMode && showGroupDrag"
+                        icon="arrows-alt-v"
+                        class="action drag me-3"
+                    />
+                    <font-awesome-icon
+                        v-if="editMode"
+                        icon="times"
+                        class="action remove me-3"
+                        @click="removeGroup(group.index)"
+                    />
+                    <Editable
+                        v-model="group.element.name"
+                        :contenteditable="editMode"
+                        tag="span"
+                        data-testid="group-name"
+                    />
                 </h2>
 
-                <div class="shadow-box monitor-list mt-4 position-relative">
-                    <div v-if="group.element.monitorList.length === 0" class="text-center no-monitor-msg">
+                <div
+                    class="iliad-MonitorGroup-list shadow-box monitor-list mt-4 position-relative"
+                >
+                    <div
+                        v-if="group.element.monitorList.length === 0"
+                        class="text-center no-monitor-msg"
+                    >
                         {{ $t("No Monitors") }}
                     </div>
 
@@ -35,10 +54,28 @@
                                 <div class="row">
                                     <div class="col-9 col-md-8 small-padding">
                                         <div class="info">
-                                            <font-awesome-icon v-if="editMode" icon="arrows-alt-v" class="action drag me-3" />
-                                            <font-awesome-icon v-if="editMode" icon="times" class="action remove me-3" @click="removeMonitor(group.index, monitor.index)" />
+                                            <font-awesome-icon
+                                                v-if="editMode"
+                                                icon="arrows-alt-v"
+                                                class="action drag me-3"
+                                            />
+                                            <font-awesome-icon
+                                                v-if="editMode"
+                                                icon="times"
+                                                class="action remove me-3"
+                                                @click="
+                                                    removeMonitor(
+                                                        group.index,
+                                                        monitor.index
+                                                    )
+                                                "
+                                            />
 
-                                            <Uptime :monitor="monitor.element" type="24" :pill="true" />
+                                            <Uptime
+                                                :monitor="monitor.element"
+                                                type="24"
+                                                :pill="true"
+                                            />
                                             <a
                                                 v-if="showLink(monitor)"
                                                 :href="monitor.element.url"
@@ -49,30 +86,73 @@
                                             >
                                                 {{ monitor.element.name }}
                                             </a>
-                                            <p v-else class="item-name" data-testid="monitor-name"> {{ monitor.element.name }} </p>
-
-                                            <span
-                                                title="Setting"
+                                            <p
+                                                v-else
+                                                class="item-name"
+                                                data-testid="monitor-name"
                                             >
+                                                {{ monitor.element.name }}
+                                            </p>
+
+                                            <span title="Setting">
                                                 <font-awesome-icon
                                                     v-if="editMode"
-                                                    :class="{'link-active': true, 'btn-link': true}"
-                                                    icon="cog" class="action me-3"
-                                                    @click="$refs.monitorSettingDialog.show(group, monitor)"
+                                                    :class="{
+                                                        'link-active': true,
+                                                        'btn-link': true,
+                                                    }"
+                                                    icon="cog"
+                                                    class="action me-3"
+                                                    @click="
+                                                        $refs.monitorSettingDialog.show(
+                                                            group,
+                                                            monitor
+                                                        )
+                                                    "
                                                 />
                                             </span>
                                         </div>
                                         <div class="extra-info">
-                                            <div v-if="showCertificateExpiry && monitor.element.certExpiryDaysRemaining">
-                                                <Tag :item="{name: $t('Cert Exp.'), value: formattedCertExpiryMessage(monitor), color: certExpiryColor(monitor)}" :size="'sm'" />
+                                            <div
+                                                v-if="
+                                                    showCertificateExpiry &&
+                                                    monitor.element
+                                                        .certExpiryDaysRemaining
+                                                "
+                                            >
+                                                <Tag
+                                                    :item="{
+                                                        name: $t('Cert Exp.'),
+                                                        value: formattedCertExpiryMessage(
+                                                            monitor
+                                                        ),
+                                                        color: certExpiryColor(
+                                                            monitor
+                                                        ),
+                                                    }"
+                                                    :size="'sm'"
+                                                />
                                             </div>
                                             <div v-if="showTags">
-                                                <Tag v-for="tag in monitor.element.tags" :key="tag" :item="tag" :size="'sm'" data-testid="monitor-tag" />
+                                                <Tag
+                                                    v-for="tag in monitor
+                                                        .element.tags"
+                                                    :key="tag"
+                                                    :item="tag"
+                                                    :size="'sm'"
+                                                    data-testid="monitor-tag"
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div :key="$root.userHeartbeatBar" class="col-3 col-md-4">
-                                        <HeartbeatBar size="mid" :monitor-id="monitor.element.id" />
+                                    <div
+                                        :key="$root.userHeartbeatBar"
+                                        class="col-3 col-md-4"
+                                    >
+                                        <HeartbeatBar
+                                            size="mid"
+                                            :monitor-id="monitor.element.id"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -113,21 +193,17 @@ export default {
         /** Should expiry be shown? */
         showCertificateExpiry: {
             type: Boolean,
-        }
+        },
     },
     data() {
-        return {
-
-        };
+        return {};
     },
     computed: {
         showGroupDrag() {
-            return (this.$root.publicGroupList.length >= 2);
-        }
+            return this.$root.publicGroupList.length >= 2;
+        },
     },
-    created() {
-
-    },
+    created() {},
     methods: {
         /**
          * Remove the specified group
@@ -161,10 +237,25 @@ export default {
         showLink(monitor, ignoreSendUrl = false) {
             // We must check if there are any elements in monitorList to
             // prevent undefined errors if it hasn't been loaded yet
-            if (this.$parent.editMode && ignoreSendUrl && Object.keys(this.$root.monitorList).length) {
-                return this.$root.monitorList[monitor.element.id].type === "http" || this.$root.monitorList[monitor.element.id].type === "keyword" || this.$root.monitorList[monitor.element.id].type === "json-query";
+            if (
+                this.$parent.editMode &&
+                ignoreSendUrl &&
+                Object.keys(this.$root.monitorList).length
+            ) {
+                return (
+                    this.$root.monitorList[monitor.element.id].type ===
+                        "http" ||
+                    this.$root.monitorList[monitor.element.id].type ===
+                        "keyword" ||
+                    this.$root.monitorList[monitor.element.id].type ===
+                        "json-query"
+                );
             }
-            return monitor.element.sendUrl && monitor.element.url && monitor.element.url !== "https://";
+            return (
+                monitor.element.sendUrl &&
+                monitor.element.url &&
+                monitor.element.url !== "https://"
+            );
         },
 
         /**
@@ -173,8 +264,15 @@ export default {
          * @returns {string} Certificate expiry message
          */
         formattedCertExpiryMessage(monitor) {
-            if (monitor?.element?.validCert && monitor?.element?.certExpiryDaysRemaining) {
-                return monitor.element.certExpiryDaysRemaining + " " + this.$tc("day", monitor.element.certExpiryDaysRemaining);
+            if (
+                monitor?.element?.validCert &&
+                monitor?.element?.certExpiryDaysRemaining
+            ) {
+                return (
+                    monitor.element.certExpiryDaysRemaining +
+                    " " +
+                    this.$tc("day", monitor.element.certExpiryDaysRemaining)
+                );
             } else if (monitor?.element?.validCert === false) {
                 return this.$t("noOrBadCertificate");
             } else {
@@ -188,12 +286,15 @@ export default {
          * @returns {string} Color for certificate expiry
          */
         certExpiryColor(monitor) {
-            if (monitor?.element?.validCert && monitor.element.certExpiryDaysRemaining > 7) {
+            if (
+                monitor?.element?.validCert &&
+                monitor.element.certExpiryDaysRemaining > 7
+            ) {
                 return "#059669";
             }
             return "#DC2626";
         },
-    }
+    },
 };
 </script>
 
@@ -269,5 +370,4 @@ export default {
 .bg-maintenance {
     background-color: $maintenance;
 }
-
 </style>

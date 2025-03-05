@@ -487,7 +487,9 @@
             </div>
 
             <!-- Overall Status -->
-            <div class="shadow-box list p-4 overall-status mb-4">
+            <div
+                class="iliad-StatusPage-titleBox shadow-box list p-4 overall-status mb-4"
+            >
                 <div
                     v-if="
                         Object.keys($root.publicMonitorList).length === 0 &&
